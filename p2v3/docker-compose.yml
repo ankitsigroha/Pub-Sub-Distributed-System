@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+
+   db:
+    image: mongo:4.0.4
+    ports:
+      - 27017:27017
+   phase3:
+    depends_on:
+        - db
+    build: .
+    ports:
+      - 5000-5001:5000

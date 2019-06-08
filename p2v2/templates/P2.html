@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<title>PUBSUB</title>
+<style>
+body {
+    background-color: lightblue;
+}
+
+h1 {
+    color: yellow;
+    text-align: center;
+    font-family: courier;
+    font-size: 48px;
+}
+
+p {
+    font-family: verdana;
+    font-size: 18px;
+}
+</style>
+</head>
+<body>
+
+<script>
+
+    //function to establish publisher and topic connection
+    function setup_pub_topic () {
+
+        // ajax call to python
+        $.ajax({
+            url:"/pubTopic",
+            type:"POST",
+            data:{
+                topic:$("#chosenTopic").val(),
+                pub:$("#chosenPublisher").val()
+            },
+            async:false,
+            datatype:'JSON',
+            success:function(json){
+                  output = json;
+                  console.log("response " + output)
+            },
+            error:function(json,status,error) {
+                console.log(error)
+            }
+        });
+    }
+
+    //function to establish subscriber and topic connection
+    function setup_sub_topic () {
+
+        // ajax call to python
+        $.ajax({
+            url:"/subTopic",
+            type:"POST",
+            data:{
+                topic:$("#chosenTopicForSubscriber").val(),
+                sub:$("#chosenSubscriber").val()
+            },
+            async:false,
+            datatype:'JSON',
+            success:function(json){
+                  output = json;
+                  console.log("response " + output)
+            },
+            error:function(json,status,error) {
+                console.log(error)
+            }
+        });
+    }
+
+    //function to publish data to the queue
+    function publish () {
+
+        // ajax call to python
+        $.ajax({
+            url:"/publish",
+            type:"POST",
+            data:{
+                msg:$("#code").val(),
+                pub:$("#publisherToSendText").val()
+            },
+            async:false,
+            datatype:'JSON',
+            success:function(json){
+                  output = json;
+                  console.log("response " + output)
+            },
+            error:function(json,status,error) {
+                console.log(error)
+            }
+        });
+    }
+
+    //function to randomly generate the entire pub,sub connections along with random data to test
+    function randomGenerator () {
+
+        // ajax call to python
+        $.ajax({
+            url:"/randomGenerator",
+            type:"POST",
+            data:{
+                subsNum:$("#subsNum").val(),
+                topicsNum:$("#topicsNum").val(),
+                pubsNum:$("#pubsNum").val()
+            },
+            async:false,
+            datatype:'JSON',
+            success:function(json){
+                  output = json;
+                  console.log("response " + output)
+                  alert(json)
+            },
+            error:function(json,status,error) {
+                console.log(error)
+            }
+        });
+    }
+
+        // function to notify users about their messages
+        function notify () {
+
+        // ajax call to python
+        $.ajax({
+            url:"/notify",
+            type:"POST",
+            async:false,
+            success:function(json){
+                  output = json;
+                  console.log("response " + output)
+                  alert(json);
+            },
+            error:function(json,status,error) {
+                console.log(error)
+            }
+        });
+    }
+
+</script>
+
+<h1>Hello there!</h1>
+
+<!--Form to get publisher and topic data and to create them  -->
+<form onsubmit="setup_pub_topic()">
+    <p><b>Enter Publisher and Topic Name</b></p>
+<p>Enter Topic Name </p>
+<input type="text" id="chosenTopic"><br>
+
+<p>Enter Publisher Name </p>
+<input type="text" id="chosenPublisher"><br>
+
+      <input type="submit" value="Submit">
+
+</form>
+
+<br><br><br><br>
+
+<!--Form to get subscriber to subscribe to a topic   -->
+<form onsubmit="setup_sub_topic()">
+        <p><b>Enter Subscriber and Topic Name</b></p>
+<p>Enter Subscriber Name </p>
+<input type="text" id="chosenSubscriber"><br>
+
+<p>Enter Topic Name </p>
+<input type="text" id="chosenTopicForSubscriber"><br>
+
+      <input type="submit" value="Submit">
+
+</form>
+<br><br><br><br>
+
+<!-- form to get user message and publish it -->
+<form onsubmit="publish()">
+    <p>Enter data to be published</p>
+ <textarea id="code" rows="10" cols="10">
+ </textarea>
+    <p>Enter Publisher Name to publish Data To</p>
+<input type="text" id="publisherToSendText"><br>
+  <input type="submit" value="Publish">
+</form>
+
+<br><br><br><br>
+
+<!-- Notify button to notify all subscribers of the messages they are supposed to get -->
+<form onsubmit="notify()">
+    <p>Click Button to notify</p>
+  <input type="submit" value="Notify">
+</form>
+
+<br><br><br><br>
+
+
+<!-- Enter number of publishers,subscribers,topics from user to randomly generate and test -->
+<p>Press the button below to randomly generate publishers,topics and subscribers to Test</p>
+<p>The number of publishers and Subscribers can be entered</p>
+<form onsubmit="randomGenerator()">
+
+    <p>Enter Number of Subscribers</p>
+    <input type="text" id="subsNum"><br>
+
+    <p>Enter Number of Topics </p>
+    <input type="text" id="topicsNum"><br>
+
+    <p>Enter Number of Publishers </p>
+    <input type="text" id="pubsNum"><br>
+
+    <input type="submit" value="Randomly Generate">
+</form>
+</body>
+</html>

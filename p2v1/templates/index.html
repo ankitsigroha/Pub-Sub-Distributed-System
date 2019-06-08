@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Proj 2 Phase 1</title>
+    <center>
+    <h1>DS Proj 2 Phase 1</h1>
+    <p>Enter a python code in the below textarea</p>
+    <p>The output of the code will be displayed as an alert </p>
+    </center>
+</head>
+<body>
+<script>
+
+    //variable to store the output of the ajax call
+    output = "";
+
+    //function to make the AJAX call
+    function make_ajax_call() {
+        code = document.getElementById('code').value;
+
+        // ajax call to python
+        $.ajax({
+            url:"/output",
+            type:"POST",
+            data:{
+                code:$("#code").val()
+            },
+            async:false,
+            datatype:'JSON',
+            success:function(json){
+                  //$('#demo').html(json);
+                  output = json;
+                  console.log("response" + output)
+                  show_response()
+            },
+            error:function(json,status,error) {
+                console.log(error)
+            }
+        });
+    }
+
+    //function to send the output of the code as an alert message
+    function show_response() {
+        console.log("testing" + output)
+        alert(output)
+    }
+
+
+</script>
+<!-- form to get user code and submit it -->
+<form onsubmit="make_ajax_call()">
+ <textarea id="code" rows="30" cols="30">
+ </textarea>
+  <input type="submit" value="Submit">
+</form>
+</body>
+</html>
